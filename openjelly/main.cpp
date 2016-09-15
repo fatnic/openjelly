@@ -17,128 +17,130 @@ GLfloat lastX = 400;
 GLfloat lastY = 300;
 bool firstMouseMove = true;
 
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
 void processMovement(Camera* camera, Window* window);
 
 int main() {
 
 	Window window("OpenJelly", 800, 600);
 
-	std::vector<GLfloat> vertices = {
-		-0.5f, -0.5f, -0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 0.0f,
+	GLfloat vertices[] = {
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	 	0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-		-0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
 
-		-0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,	  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 1.0f,	  1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,	  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
-		 0.5f,  0.5f,  0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,    1.0f, 1.0f, 1.0f,	 0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,    1.0f, 1.0f, 1.0f,	 0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,    1.0f, 1.0f, 1.0f,	 0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
-		-0.5f, -0.5f, -0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
 
-		-0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,    1.0f, 1.0f, 1.0f,	 1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 1.0f,	  0.0f, 1.0f
-	};
-	std::vector<glm::vec3> boxes = {
-		glm::vec3(1.05f, 1.05f, 0.0f),
-		glm::vec3(1.005f,  0.0f,  0.0f),
-		glm::vec3(1.005f, -1.005f, 0.0f),
-
-		glm::vec3(0.0f,  0.0f,  0.0f),
-		glm::vec3(0.0f,  1.005f, 0.0f),
-		glm::vec3(0.0f, -1.005f, 0.0f),
-
-		glm::vec3(-1.05f, 1.05f, 0.0f),
-		glm::vec3(-1.005f,  0.0f,  0.0f),
-		glm::vec3(-1.005f, -1.005f, 0.0f),
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	Shader boxShader  ("shaders/basic.vs", "shaders/basic.frag");
+	Shader lightShader("shaders/light.vs", "shaders/light.frag");
 
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices.front(), GL_STATIC_DRAW);
+	GLuint VBO, containerVAO, lightVAO;
+	glGenVertexArrays(1, &containerVAO);
+	glGenVertexArrays(1, &lightVAO);
+	glGenBuffers(1, &VBO);
 
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindVertexArray(containerVAO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+	glBindVertexArray(0);
 
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glBindVertexArray(lightVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+	glBindVertexArray(0);
 
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
-
-	std::string filename = "images/container2.png";
-	int tW, tH, tC;
-	unsigned char* texImage = stbi_load(filename.c_str(), &tW, &tH, &tC, STBI_rgb);
-
-	GLuint texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tW, tH, 0, GL_RGB, GL_UNSIGNED_BYTE, texImage);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	stbi_image_free(texImage);
-
-	Shader shader("shaders/basic.vs", "shaders/basic.frag");
-	shader.use();
-
-	glClearColor(0.2f, 0.3f, 0.7f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 	Camera camera(glm::vec3(0.0f, 0.0f, 6.0f));
 
-	glm::mat4 view, projection, transform;
-	projection = glm::perspective(camera.fov, (GLfloat)(window.getWidth() / window.getHeight()), 0.1f, 100.0f);
 
-	GLint transformLoc = glGetUniformLocation(shader.program, "transform");
-	
 	while (!window.closed()) {
+
+		window.clear();
 
 		if (window.isKeyPressed(GLFW_KEY_ESCAPE))
 			window.close();
-		
+
 		processMovement(&camera, &window);
 
-		window.clear();
-		
-		view = camera.getView();
+		boxShader.use();
+		GLint objectColourLoc = glGetUniformLocation(boxShader.program, "objectColour");
+		GLint lightColourLoc  = glGetUniformLocation(boxShader.program, "lightColour");
+		glUniform3f(objectColourLoc, 1.0f, 0.5f, 0.31f);
+		glUniform3f(lightColourLoc,  1.0f, 0.5f, 1.0f);
 
-		for (glm::vec3 box : boxes) {
-			glm::mat4 model;
-			model = glm::translate(model, box);
-			transform = projection * view * model;
-			glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
+		glm::mat4 model, view, projection;
+		view = camera.getView();
+		projection = glm::perspective(camera.fov, (GLfloat)(window.getWidth() / window.getHeight()), 0.1f, 100.0f);
+
+		GLint modelLoc		= glGetUniformLocation(boxShader.program, "model");
+		GLint viewLoc		= glGetUniformLocation(boxShader.program, "view");
+		GLint projectionLoc = glGetUniformLocation(boxShader.program, "projection");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+		glBindVertexArray(containerVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+
+		lightShader.use();
+		modelLoc = glGetUniformLocation(lightShader.program, "model");
+		viewLoc = glGetUniformLocation(lightShader.program, "view");
+		projectionLoc = glGetUniformLocation(lightShader.program, "projection");
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+		model = glm::mat4();
+		model = glm::translate(model, lightPos);
+		model = glm::scale(model, glm::vec3(0.2f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		
+		glBindVertexArray(lightVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
 
 		window.update();
 

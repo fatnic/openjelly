@@ -45,5 +45,7 @@
     </None>
     <None Include="shaders\basic.frag" />
     <None Include="shaders\basic.vs" />
+    <None Include="shaders\light.frag" />
+    <None Include="shaders\light.vs" />
   </ItemGroup>
 </Project>

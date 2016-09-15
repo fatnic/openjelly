@@ -148,6 +148,8 @@
     <None Include="basic.vs" />
     <None Include="shaders\basic.frag" />
     <None Include="shaders\basic.vs" />
+    <None Include="shaders\light.frag" />
+    <None Include="shaders\light.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

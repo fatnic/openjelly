@@ -104,6 +104,9 @@ int main() {
 
 		processMovement(&camera, &window);
 
+		lightPos.x = 1.0f + std::sin(glfwGetTime()) * 2.0f;
+		lightPos.y = std::sin(glfwGetTime() / 2.0f) * 1.0f;
+
 		boxShader.use();
 		GLint objectColourLoc = glGetUniformLocation(boxShader.program, "objectColor");
 		GLint lightColourLoc  = glGetUniformLocation(boxShader.program, "lightColor");
@@ -138,7 +141,7 @@ int main() {
 
 		model = glm::mat4();
 		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::scale(model, glm::vec3(0.1f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		
 		glBindVertexArray(lightVAO);

@@ -7,6 +7,9 @@
 
 #include <GL\glew.h>
 
+#include <glm\glm.hpp>
+#include <glm\gtc\type_ptr.hpp>
+
 class Shader {
 public:
 	GLuint program;
@@ -86,6 +89,18 @@ public:
 
 	GLint getUniform(const char* uniform) {
 		return glGetUniformLocation(program, uniform);
+	}
+
+	void setUniform(const char* name, GLfloat x, GLfloat y, GLfloat z) {
+		this->use();
+		GLint uniformLocation = glGetUniformLocation(this->program, name);
+		glUniform3f(uniformLocation, x, y, z);
+	}
+
+	void setUniform(const char* name, glm::mat4* value) {
+		this->use();
+		GLint uniformLocation = glGetUniformLocation(this->program, name);
+		glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(*value));
 	}
 
 };

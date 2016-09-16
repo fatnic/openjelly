@@ -16,7 +16,7 @@ GLfloat lastX = 400;
 GLfloat lastY = 300;
 bool firstMouseMove = true;
 
-glm::vec3 lightPos(0.8f, 1.0f, 2.0f);
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 void processMovement(Camera* camera, Window* window);
 
@@ -91,7 +91,7 @@ int main() {
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
 
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
 	Camera camera(glm::vec3(-1.0f, 1.0f, 4.0f));
 
@@ -105,12 +105,12 @@ int main() {
 		processMovement(&camera, &window);
 
 		boxShader.use();
-		GLint objectColourLoc = glGetUniformLocation(boxShader.program, "objectColour");
-		GLint lightColourLoc  = glGetUniformLocation(boxShader.program, "lightColour");
+		GLint objectColourLoc = glGetUniformLocation(boxShader.program, "objectColor");
+		GLint lightColourLoc  = glGetUniformLocation(boxShader.program, "lightColor");
 		GLint lightPosLoc	  = glGetUniformLocation(boxShader.program, "lightPos");
 		GLint viewPosLoc	  = glGetUniformLocation(boxShader.program, "viewPos");
 		glUniform3f(objectColourLoc, 1.0f, 0.5f, 0.31f);
-		glUniform3f(lightColourLoc,  1.0f, 0.5f, 1.0f);
+		glUniform3f(lightColourLoc,  1.0f, 1.0f, 1.0f);
 		glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
 		glUniform3f(viewPosLoc, camera.position.x, camera.position.y, camera.position.z);
 

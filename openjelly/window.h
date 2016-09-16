@@ -29,7 +29,7 @@ public:
 	GLFWwindow* _window;
 	bool closed();
 	void close();
-	void clear();
+	void clear(GLfloat r = 0.0f, GLfloat g = 0.0f, GLfloat b = 0.0f, GLfloat a = 1.0f);
 	void update();
 	int getWidth() const;
 	int getHeight() const;

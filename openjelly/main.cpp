@@ -84,13 +84,11 @@ int main() {
 	VertexArray light(VBO, &lightShader);
 	light.enableAttrib(0, 3, 0);
 
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-
 	Camera camera(glm::vec3(-1.0f, 1.0f, 4.0f));
 
 	while (!window.closed()) {
 
-		window.clear();
+		window.clear(0.1f, 0.1, 0.1f);
 
 		if (window.isKeyPressed(GLFW_KEY_ESCAPE))
 			window.close();
@@ -100,18 +98,16 @@ int main() {
 		lightPos.x = 1.0f + std::sin(glfwGetTime()) * 2.0f;
 		lightPos.y = std::sin(glfwGetTime() / 2.0f) * 1.0f;
 
-		boxShader.setUniform("objectColor", 1.0f, 0.5f, 0.31f);
-		boxShader.setUniform("lightColor",  1.0f, 1.0f, 1.0f);
-		boxShader.setUniform("light.position", lightPos);
 		boxShader.setUniform("viewPos", camera.position);
 
-		boxShader.setUniform("light.ambient", 0.2f, 0.2f, 0.2f);
-		boxShader.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f);
+		boxShader.setUniform("light.position", lightPos);
+		boxShader.setUniform("light.ambient",  1.0f, 1.0f, 1.0f);
+		boxShader.setUniform("light.diffuse",  1.0f, 1.0f, 1.0f);
 		boxShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
 
-		boxShader.setUniform("material.ambient", 1.0f, 0.5f, 0.31f);
-		boxShader.setUniform("material.diffuse", 1.0f, 0.5f, 0.31f);
-		boxShader.setUniform("material.specular", 0.5f, 0.5f, 0.5f);
+		boxShader.setUniform("material.ambient", 0.0f, 0.1f, 0.06f);
+		boxShader.setUniform("material.diffuse", 0.0f, 0.50980392f, 0.50980392f);
+		boxShader.setUniform("material.specular", 0.50196078f, 0.50196078f, 0.50196078f);
 		boxShader.setUniform("material.shininess", 32.0f);
 
 		glm::mat4 model, view, projection;

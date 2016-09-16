@@ -81,8 +81,9 @@ bool Window::init()
 	return true;
 }
 
-void Window::clear() 
+void Window::clear(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 {
+	glClearColor(r, g, b, a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

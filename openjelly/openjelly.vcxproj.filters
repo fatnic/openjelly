@@ -47,8 +47,8 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="shaders\basic.frag" />
-    <None Include="shaders\basic.vs" />
     <None Include="shaders\light.frag" />
-    <None Include="shaders\light.vs" />
+    <None Include="shaders\light.vert" />
+    <None Include="shaders\basic.vert" />
   </ItemGroup>
 </Project>

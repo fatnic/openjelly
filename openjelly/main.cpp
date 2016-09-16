@@ -69,8 +69,8 @@ int main() {
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 	};
 
-	Shader boxShader  ("shaders/basic.vs", "shaders/basic.frag");
-	Shader lightShader("shaders/light.vs", "shaders/light.frag");
+	Shader boxShader  ("shaders/basic.vert", "shaders/basic.frag");
+	Shader lightShader("shaders/light.vert", "shaders/light.frag");
 
 	GLuint VBO;
 	glGenBuffers(1, &VBO);
@@ -105,10 +105,10 @@ int main() {
 		boxShader.setUniform("light.diffuse",  1.0f, 1.0f, 1.0f);
 		boxShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
 
-		boxShader.setUniform("material.ambient", 0.0f, 0.1f, 0.06f);
-		boxShader.setUniform("material.diffuse", 0.0f, 0.50980392f, 0.50980392f);
-		boxShader.setUniform("material.specular", 0.50196078f, 0.50196078f, 0.50196078f);
-		boxShader.setUniform("material.shininess", 32.0f);
+		boxShader.setUniform("material.ambient", 0.05375f, 0.05f, 0.06625f);
+		boxShader.setUniform("material.diffuse", 0.18275f, 0.17f, 0.22525f);
+		boxShader.setUniform("material.specular", 0.332741f, 0.328634f, 0.346435f);
+		boxShader.setUniform("material.shininess", 38.0f);
 
 		glm::mat4 model, view, projection;
 		view = camera.getView();
@@ -118,13 +118,13 @@ int main() {
 		boxShader.setUniform("view", &view);
 		boxShader.setUniform("projection", &projection);
 
-		lightShader.setUniform("view", &view);
-		lightShader.setUniform("projection", &projection);
-	
 		model = glm::mat4();
 		model = glm::translate(model, lightPos);
 		model = glm::scale(model, glm::vec3(0.1f));
+
 		lightShader.setUniform("model", &model);
+		lightShader.setUniform("view", &view);
+		lightShader.setUniform("projection", &projection);
 		
 		container.draw(36);
 		light.draw(36);

@@ -103,6 +103,13 @@ public:
 		glUniform3f(uniformLocation, value.x, value.y, value.z);
 	}
 
+	void setUniform(const char* name, GLfloat value) {
+		this->use();
+		GLint uniformLocation = glGetUniformLocation(this->program, name);
+		glUniform1f(uniformLocation, value);
+	}
+
+
 	void setUniform(const char* name, glm::mat4* value) {
 		this->use();
 		GLint uniformLocation = glGetUniformLocation(this->program, name);

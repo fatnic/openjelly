@@ -102,8 +102,17 @@ int main() {
 
 		boxShader.setUniform("objectColor", 1.0f, 0.5f, 0.31f);
 		boxShader.setUniform("lightColor",  1.0f, 1.0f, 1.0f);
-		boxShader.setUniform("lightPos", lightPos);
+		boxShader.setUniform("light.position", lightPos);
 		boxShader.setUniform("viewPos", camera.position);
+
+		boxShader.setUniform("light.ambient", 0.2f, 0.2f, 0.2f);
+		boxShader.setUniform("light.diffuse", 0.5f, 0.5f, 0.5f);
+		boxShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
+
+		boxShader.setUniform("material.ambient", 1.0f, 0.5f, 0.31f);
+		boxShader.setUniform("material.diffuse", 1.0f, 0.5f, 0.31f);
+		boxShader.setUniform("material.specular", 0.5f, 0.5f, 0.5f);
+		boxShader.setUniform("material.shininess", 32.0f);
 
 		glm::mat4 model, view, projection;
 		view = camera.getView();

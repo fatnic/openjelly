@@ -97,6 +97,12 @@ public:
 		glUniform3f(uniformLocation, x, y, z);
 	}
 
+	void setUniform(const char* name, glm::vec3 value) {
+		this->use();
+		GLint uniformLocation = glGetUniformLocation(this->program, name);
+		glUniform3f(uniformLocation, value.x, value.y, value.z);
+	}
+
 	void setUniform(const char* name, glm::mat4* value) {
 		this->use();
 		GLint uniformLocation = glGetUniformLocation(this->program, name);

@@ -141,6 +141,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="vertexarray.h" />
     <ClInclude Include="window.h" />
   </ItemGroup>
   <ItemGroup>

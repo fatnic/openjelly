@@ -8,6 +8,7 @@
 #include "window.h"
 #include "shader.h"
 #include "camera.h"
+#include "vertexarray.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -71,25 +72,17 @@ int main() {
 	Shader boxShader  ("shaders/basic.vs", "shaders/basic.frag");
 	Shader lightShader("shaders/light.vs", "shaders/light.frag");
 
-	GLuint VBO, containerVAO, lightVAO;
-
+	GLuint VBO;
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glGenVertexArrays(1, &containerVAO);
-	glBindVertexArray(containerVAO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
-	glBindVertexArray(0);
+	VertexArray container(VBO);
+	container.enableAttrib(0, 3, 0);
+	container.enableAttrib(1, 3, 3);
 
-	glGenVertexArrays(1, &lightVAO);
-	glBindVertexArray(lightVAO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-	glBindVertexArray(0);
+	VertexArray light(VBO);
+	light.enableAttrib(0, 3, 0);
 
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
@@ -108,46 +101,32 @@ int main() {
 		lightPos.y = std::sin(glfwGetTime() / 2.0f) * 1.0f;
 
 		boxShader.use();
-		GLint objectColourLoc = glGetUniformLocation(boxShader.program, "objectColor");
-		GLint lightColourLoc  = glGetUniformLocation(boxShader.program, "lightColor");
-		GLint lightPosLoc	  = glGetUniformLocation(boxShader.program, "lightPos");
-		GLint viewPosLoc	  = glGetUniformLocation(boxShader.program, "viewPos");
-		glUniform3f(objectColourLoc, 1.0f, 0.5f, 0.31f);
-		glUniform3f(lightColourLoc,  1.0f, 1.0f, 1.0f);
-		glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
-		glUniform3f(viewPosLoc, camera.position.x, camera.position.y, camera.position.z);
+		boxShader.setUniform("objectColor", 1.0f, 0.5f, 0.31f);
+		boxShader.setUniform("lightColor",  1.0f, 1.0f, 1.0f);
+		boxShader.setUniform("lightPos", lightPos);
+		boxShader.setUniform("viewPos", camera.position);
 
 		glm::mat4 model, view, projection;
 		view = camera.getView();
 		projection = glm::perspective(camera.fov, (GLfloat)(window.getWidth() / window.getHeight()), 0.1f, 100.0f);
 
-		GLint modelLoc		= glGetUniformLocation(boxShader.program, "model");
-		GLint viewLoc		= glGetUniformLocation(boxShader.program, "view");
-		GLint projectionLoc = glGetUniformLocation(boxShader.program, "projection");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		boxShader.setUniform("model", &model);
+		boxShader.setUniform("view", &view);
+		boxShader.setUniform("projection", &projection);
 
-		glBindVertexArray(containerVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
+		container.draw(36);
 
 		lightShader.use();
-		modelLoc = glGetUniformLocation(lightShader.program, "model");
-		viewLoc = glGetUniformLocation(lightShader.program, "view");
-		projectionLoc = glGetUniformLocation(lightShader.program, "projection");
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
+		lightShader.setUniform("view", &view);
+		lightShader.setUniform("projection", &projection);
+	
 		model = glm::mat4();
 		model = glm::translate(model, lightPos);
 		model = glm::scale(model, glm::vec3(0.1f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		lightShader.setUniform("model", &model);
 		
-		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
-
+		light.draw(36);
+		
 		window.update();
 
 	}

@@ -37,6 +37,8 @@ bool Window::init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
+	glfwWindowHint(GLFW_SAMPLES, 4);
+
 	_window = glfwCreateWindow(_width, _height, _title, nullptr, nullptr);
 
 	if (!_window) {
@@ -70,6 +72,7 @@ bool Window::init()
 
 	std::cout << glGetString(GL_VERSION) << std::endl;
 
+	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 

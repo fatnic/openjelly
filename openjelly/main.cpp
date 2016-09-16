@@ -77,11 +77,11 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	VertexArray container(VBO);
+	VertexArray container(VBO, &boxShader);
 	container.enableAttrib(0, 3, 0);
 	container.enableAttrib(1, 3, 3);
 
-	VertexArray light(VBO);
+	VertexArray light(VBO, &lightShader);
 	light.enableAttrib(0, 3, 0);
 
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -100,7 +100,6 @@ int main() {
 		lightPos.x = 1.0f + std::sin(glfwGetTime()) * 2.0f;
 		lightPos.y = std::sin(glfwGetTime() / 2.0f) * 1.0f;
 
-		boxShader.use();
 		boxShader.setUniform("objectColor", 1.0f, 0.5f, 0.31f);
 		boxShader.setUniform("lightColor",  1.0f, 1.0f, 1.0f);
 		boxShader.setUniform("lightPos", lightPos);
@@ -114,9 +113,6 @@ int main() {
 		boxShader.setUniform("view", &view);
 		boxShader.setUniform("projection", &projection);
 
-		container.draw(36);
-
-		lightShader.use();
 		lightShader.setUniform("view", &view);
 		lightShader.setUniform("projection", &projection);
 	
@@ -125,6 +121,7 @@ int main() {
 		model = glm::scale(model, glm::vec3(0.1f));
 		lightShader.setUniform("model", &model);
 		
+		container.draw(36);
 		light.draw(36);
 		
 		window.update();

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -21,7 +20,7 @@ void processMovement(Camera* camera, Window* window);
 
 int main() {
 
-	Window window("OpenJelly", 800, 600);
+	Window window("OpenJelly", 600, 600);
 
 	GLfloat vertices[] = {
 		// Positions           // Normals           // Texture Coords
@@ -89,6 +88,20 @@ int main() {
 
 	Camera camera(glm::vec3(-1.0f, 1.0f, 4.0f));
 
+	boxShader.setUniform("light.ambient",  0.1f, 0.1f, 0.1f);
+	boxShader.setUniform("light.diffuse",  1.0f, 1.0f, 1.0f);
+	boxShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, diffuseMap.id);
+	boxShader.setUniform("material.diffuse", 0);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, specularMap.id);
+	boxShader.setUniform("material.specular", 1);
+
+	boxShader.setUniform("material.shininess", 32.0f);
+
 	while (!window.closed()) {
 
 		window.clear(0.1f, 0.1, 0.1f);
@@ -102,23 +115,7 @@ int main() {
 		lightPos.y = std::sin(glfwGetTime() / 2.0f) * 1.0f;
 
 		boxShader.setUniform("viewPos", camera.position);
-
 		boxShader.setUniform("light.position", lightPos);
-		boxShader.setUniform("light.ambient",  1.0f, 1.0f, 1.0f);
-		boxShader.setUniform("light.diffuse",  1.0f, 1.0f, 1.0f);
-		boxShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, diffuseMap.id);
-		boxShader.setUniform("material.diffuse", 0);
-
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, specularMap.id);
-		boxShader.setUniform("material.specular", 1);
-
-		boxShader.setUniform("material.ambient", 0.05375f, 0.05f, 0.06625f);
-		boxShader.setUniform("material.shininess", 38.0f);
-
 		glm::mat4 model, view, projection;
 		view = camera.getView();
 		projection = glm::perspective(camera.fov, (GLfloat)(window.getWidth() / window.getHeight()), 0.1f, 100.0f);
@@ -135,8 +132,6 @@ int main() {
 		lightShader.setUniform("view", &view);
 		lightShader.setUniform("projection", &projection);
 		
-
-
 		container.draw(36);
 		light.draw(36);
 		

@@ -8,10 +8,8 @@
 #include "window.h"
 #include "shader.h"
 #include "camera.h"
+#include "texture.h"
 #include "vertexarray.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
 
 GLfloat lastX = 400;
 GLfloat lastY = 300;
@@ -73,27 +71,8 @@ int main() {
 	Shader boxShader  ("shaders/basic.vert", "shaders/basic.frag");
 	Shader lightShader("shaders/light.vert", "shaders/light.frag");
 
-	std::string filename = "images/container2.png";
-	int tW, tH, tC;
-	unsigned char* texImage = stbi_load(filename.c_str(), &tW, &tH, &tC, STBI_rgb);
-	GLuint diffuseMap;
-	glGenTextures(1, &diffuseMap);
-	glBindTexture(GL_TEXTURE_2D, diffuseMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tW, tH, 0, GL_RGB, GL_UNSIGNED_BYTE, texImage);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	stbi_image_free(texImage);
-
-	filename = "images/container2_specular.png";
-	texImage = stbi_load(filename.c_str(), &tW, &tH, &tC, STBI_rgb);
-	GLuint specularMap;
-	glGenTextures(1, &specularMap);
-	glBindTexture(GL_TEXTURE_2D, specularMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tW, tH, 0, GL_RGB, GL_UNSIGNED_BYTE, texImage);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	stbi_image_free(texImage);
+	Texture diffuseMap("images/container2.png");
+	Texture specularMap("images/container2_specular.png");
 
 	GLuint VBO;
 	glGenBuffers(1, &VBO);
@@ -130,11 +109,11 @@ int main() {
 		boxShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
 
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, diffuseMap);
+		glBindTexture(GL_TEXTURE_2D, diffuseMap.id);
 		boxShader.setUniform("material.diffuse", 0);
 
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, specularMap);
+		glBindTexture(GL_TEXTURE_2D, specularMap.id);
 		boxShader.setUniform("material.specular", 1);
 
 		boxShader.setUniform("material.ambient", 0.05375f, 0.05f, 0.06625f);

@@ -80,7 +80,14 @@ int main() {
 		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
-	Camera camera(glm::vec3(-1.0f, 1.0f, 4.0f));
+	glm::vec3 pointLightPositions[] = {
+        glm::vec3( 0.7f,  0.2f,  2.0f),
+        glm::vec3( 2.3f, -3.3f, -4.0f),
+        glm::vec3(-4.0f,  2.0f, -12.0f),
+        glm::vec3( 0.0f,  0.0f, -3.0f)
+    };
+
+	Camera camera(glm::vec3(-1.0f, 1.0f, 3.0f));
 
 	Shader boxShader  ("shaders/basic.vert", "shaders/basic.frag");
 	Shader lightShader("shaders/light.vert", "shaders/light.frag");
@@ -128,10 +135,43 @@ int main() {
 		processMovement(&camera, &window);
 
 		boxShader.setUniform("viewPos", camera.position);
-		boxShader.setUniform("light.position", camera.position);
-		boxShader.setUniform("light.direction", camera.front);
-		boxShader.setUniform("light.cutOff", glm::cos(glm::radians(12.5f)));
-		boxShader.setUniform("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+
+		boxShader.setUniform("dirLight.direction", -0.2f, -1.0f, -0.3f);
+		boxShader.setUniform("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+		boxShader.setUniform("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+		boxShader.setUniform("dirLight.specular", 0.5f, 0.5f, 0.5f);
+		
+		boxShader.setUniform("pointLights[0].position", pointLightPositions[0]);
+		boxShader.setUniform("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+		boxShader.setUniform("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+		boxShader.setUniform("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		boxShader.setUniform("pointLights[0].constant", 1.0f);
+		boxShader.setUniform("pointLights[0].linear", 0.09f);
+		boxShader.setUniform("pointLights[0].quadratic", 0.032f);
+
+		boxShader.setUniform("pointLights[1].position", pointLightPositions[1]);
+		boxShader.setUniform("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+		boxShader.setUniform("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+		boxShader.setUniform("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+		boxShader.setUniform("pointLights[1].constant", 1.0f);
+		boxShader.setUniform("pointLights[1].linear", 0.09f);
+		boxShader.setUniform("pointLights[1].quadratic", 0.032f);
+
+		boxShader.setUniform("pointLights[2].position", pointLightPositions[2]);
+		boxShader.setUniform("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+		boxShader.setUniform("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+		boxShader.setUniform("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+		boxShader.setUniform("pointLights[2].constant", 1.0f);
+		boxShader.setUniform("pointLights[2].linear", 0.09f);
+		boxShader.setUniform("pointLights[2].quadratic", 0.032f);
+
+		boxShader.setUniform("pointLights[3].position", pointLightPositions[3]);
+		boxShader.setUniform("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+		boxShader.setUniform("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+		boxShader.setUniform("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+		boxShader.setUniform("pointLights[3].constant", 1.0f);
+		boxShader.setUniform("pointLights[3].linear", 0.09f);
+		boxShader.setUniform("pointLights[3].quadratic", 0.032f);
 
 		glm::mat4 model, view, projection;
 		view = camera.getView();
@@ -150,13 +190,16 @@ int main() {
 			container.draw(36);
 		}
 
-		model = glm::mat4();
-		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
-		lightShader.setUniform("model", &model);
-		lightShader.setUniform("view", &view);
-		lightShader.setUniform("projection", &projection);
-		//light.draw(36);
+		for (GLuint i = 0; i < 4; i++)
+		{
+			model = glm::mat4();
+			model = glm::translate(model, pointLightPositions[i]);
+			model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+			lightShader.setUniform("model", &model);
+			lightShader.setUniform("view", &view);
+			lightShader.setUniform("projection", &projection);
+			light.draw(36);
+		}
 
 		window.update();
 

@@ -21,27 +21,30 @@ int main() {
 
 	Window window("OpenJelly", 600, 600);
 
-	Camera camera(glm::vec3(-1.0f, 1.0f, 3.0f));
+	Camera camera(glm::vec3(-1.0f, 1.0f, 6.0f));
 
-	Shader basicShader  ("shaders/basic.vert", "shaders/basic.frag");
+	Shader basicShader("shaders/basic.vert", "shaders/basic.frag");
 
-	ObjLoader cylinder("objects/cylinder.obj");
+	ObjLoader mesh("objects/box.obj");
 
 	GLuint VBO;
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, cylinder.data.size() * sizeof(GLfloat), &cylinder.data[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, mesh.memSize, &mesh.data[0], GL_STATIC_DRAW);
 
-	VertexArray cyl(VBO, &basicShader);
-	cyl.enableAttrib(0, 3, 0);
-	cyl.enableAttrib(1, 2, 3);
-	cyl.enableAttrib(2, 3, 5);
+	VertexArray obj(VBO, &basicShader);
+	obj.enableAttrib(0, 3, 0);
+	obj.enableAttrib(1, 2, 3);
+	obj.enableAttrib(2, 3, 5);
 
 	glm::mat4 model, view, projection;
 	projection = glm::perspective(camera.fov, (GLfloat)(window.getWidth() / window.getHeight()), 0.1f, 100.0f);
 	
 	basicShader.setUniform("model", &model);
 	basicShader.setUniform("projection", &projection);
+
+	Texture meshTexture("objects/dice.png");
+	glBindTexture(GL_TEXTURE_2D, meshTexture.id);
 
 	while (!window.closed()) {
 
@@ -53,10 +56,9 @@ int main() {
 		processMovement(&camera, &window);
 
 		view = camera.getView();
-		
 		basicShader.setUniform("view", &view);
 
-		cyl.draw(cylinder.data.size() / 8);
+		obj.draw(mesh.data.size() / 8);
 
 		window.update();
 

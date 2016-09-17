@@ -13,6 +13,7 @@ class ObjLoader {
 public:
 
 	std::vector<float> data;
+	float memSize;
 
 	ObjLoader(const char* filename) {
 		
@@ -91,6 +92,8 @@ public:
 			}
 
 		}
+
+		memSize = data.size() * sizeof(float);
 
 	}
 

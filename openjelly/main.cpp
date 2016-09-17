@@ -121,9 +121,6 @@ int main() {
 
 		processMovement(&camera, &window);
 
-		lightPos.x = 1.0f + std::sin(glfwGetTime()) * 2.0f;
-		lightPos.y = std::sin(glfwGetTime() / 2.0f) * 1.0f;
-
 		boxShader.setUniform("viewPos", camera.position);
 		boxShader.setUniform("light.direction", -0.2f, -1.0f, -0.3f);
 		glm::mat4 model, view, projection;

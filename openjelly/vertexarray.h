@@ -14,7 +14,7 @@ public:
 
 	void enableAttrib(GLuint num, GLuint count, GLuint stride) {
 		glBindVertexArray(_vao);
-		glVertexAttribPointer(num, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(stride * sizeof(GLfloat)));
+		glVertexAttribPointer(num, count, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(stride * sizeof(GLfloat)));
 		glEnableVertexAttribArray(num);
 		glBindVertexArray(0);
 	}

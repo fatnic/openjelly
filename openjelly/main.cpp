@@ -98,6 +98,9 @@ int main() {
 	container.enableAttrib(1, 3, 3);
 	container.enableAttrib(2, 2, 6);
 
+	VertexArray light(VBO, &lightShader);
+	light.enableAttrib(0, 3, 0);
+
 	boxShader.setUniform("light.ambient",  0.1f, 0.1f, 0.1f);
 	boxShader.setUniform("light.diffuse",  1.0f, 1.0f, 1.0f);
 	boxShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
@@ -139,7 +142,15 @@ int main() {
 			boxShader.setUniform("model", &model);
 			container.draw(36);
 		}
-		
+
+		model = glm::mat4();
+		model = glm::translate(model, lightPos);
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+		lightShader.setUniform("model", &model);
+		lightShader.setUniform("view", &view);
+		lightShader.setUniform("projection", &projection);
+		light.draw(36);
+
 		window.update();
 
 	}

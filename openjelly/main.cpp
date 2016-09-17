@@ -9,6 +9,7 @@
 #include "camera.h"
 #include "texture.h"
 #include "vertexarray.h"
+#include "objloader.h"
 
 GLfloat lastX = 400;
 GLfloat lastY = 300;
@@ -22,7 +23,25 @@ int main() {
 
 	Camera camera(glm::vec3(-1.0f, 1.0f, 3.0f));
 
-	Shader boxShader  ("shaders/basic.vert", "shaders/basic.frag");
+	Shader basicShader  ("shaders/basic.vert", "shaders/basic.frag");
+
+	ObjLoader cylinder("objects/cylinder.obj");
+
+	GLuint VBO;
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, cylinder.data.size() * sizeof(GLfloat), &cylinder.data[0], GL_STATIC_DRAW);
+
+	VertexArray cyl(VBO, &basicShader);
+	cyl.enableAttrib(0, 3, 0);
+	cyl.enableAttrib(1, 2, 3);
+	cyl.enableAttrib(2, 3, 5);
+
+	glm::mat4 model, view, projection;
+	projection = glm::perspective(camera.fov, (GLfloat)(window.getWidth() / window.getHeight()), 0.1f, 100.0f);
+	
+	basicShader.setUniform("model", &model);
+	basicShader.setUniform("projection", &projection);
 
 	while (!window.closed()) {
 
@@ -32,6 +51,12 @@ int main() {
 			window.close();
 
 		processMovement(&camera, &window);
+
+		view = camera.getView();
+		
+		basicShader.setUniform("view", &view);
+
+		cyl.draw(cylinder.data.size() / 8);
 
 		window.update();
 

@@ -104,6 +104,9 @@ int main() {
 	boxShader.setUniform("light.ambient",  0.1f, 0.1f, 0.1f);
 	boxShader.setUniform("light.diffuse",  1.0f, 1.0f, 1.0f);
 	boxShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
+	boxShader.setUniform("light.constant", 1.0f);
+	boxShader.setUniform("light.linear", 0.09f);
+	boxShader.setUniform("light.quadratic", 0.032f);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, diffuseMap.id);
@@ -125,7 +128,7 @@ int main() {
 		processMovement(&camera, &window);
 
 		boxShader.setUniform("viewPos", camera.position);
-		boxShader.setUniform("light.direction", -0.2f, -1.0f, -0.3f);
+		boxShader.setUniform("light.position", lightPos);
 		glm::mat4 model, view, projection;
 		view = camera.getView();
 		projection = glm::perspective(camera.fov, (GLfloat)(window.getWidth() / window.getHeight()), 0.1f, 100.0f);

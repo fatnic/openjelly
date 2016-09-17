@@ -102,7 +102,7 @@ int main() {
 	light.enableAttrib(0, 3, 0);
 
 	boxShader.setUniform("light.ambient",  0.1f, 0.1f, 0.1f);
-	boxShader.setUniform("light.diffuse",  1.0f, 1.0f, 1.0f);
+	boxShader.setUniform("light.diffuse",  0.8f, 0.8f, 0.8f);
 	boxShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
 	boxShader.setUniform("light.constant", 1.0f);
 	boxShader.setUniform("light.linear", 0.09f);
@@ -128,7 +128,11 @@ int main() {
 		processMovement(&camera, &window);
 
 		boxShader.setUniform("viewPos", camera.position);
-		boxShader.setUniform("light.position", lightPos);
+		boxShader.setUniform("light.position", camera.position);
+		boxShader.setUniform("light.direction", camera.front);
+		boxShader.setUniform("light.cutOff", glm::cos(glm::radians(12.5f)));
+		boxShader.setUniform("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+
 		glm::mat4 model, view, projection;
 		view = camera.getView();
 		projection = glm::perspective(camera.fov, (GLfloat)(window.getWidth() / window.getHeight()), 0.1f, 100.0f);
@@ -152,7 +156,7 @@ int main() {
 		lightShader.setUniform("model", &model);
 		lightShader.setUniform("view", &view);
 		lightShader.setUniform("projection", &projection);
-		light.draw(36);
+		//light.draw(36);
 
 		window.update();
 

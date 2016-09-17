@@ -80,6 +80,8 @@ int main() {
 		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
+	Camera camera(glm::vec3(-1.0f, 1.0f, 4.0f));
+
 	Shader boxShader  ("shaders/basic.vert", "shaders/basic.frag");
 	Shader lightShader("shaders/light.vert", "shaders/light.frag");
 
@@ -95,11 +97,6 @@ int main() {
 	container.enableAttrib(0, 3, 0);
 	container.enableAttrib(1, 3, 3);
 	container.enableAttrib(2, 2, 6);
-
-	VertexArray light(VBO, &lightShader);
-	light.enableAttrib(0, 3, 0);
-
-	Camera camera(glm::vec3(-1.0f, 1.0f, 4.0f));
 
 	boxShader.setUniform("light.ambient",  0.1f, 0.1f, 0.1f);
 	boxShader.setUniform("light.diffuse",  1.0f, 1.0f, 1.0f);
@@ -128,7 +125,7 @@ int main() {
 		lightPos.y = std::sin(glfwGetTime() / 2.0f) * 1.0f;
 
 		boxShader.setUniform("viewPos", camera.position);
-		boxShader.setUniform("light.position", lightPos);
+		boxShader.setUniform("light.direction", -0.2f, -1.0f, -0.3f);
 		glm::mat4 model, view, projection;
 		view = camera.getView();
 		projection = glm::perspective(camera.fov, (GLfloat)(window.getWidth() / window.getHeight()), 0.1f, 100.0f);
@@ -145,20 +142,6 @@ int main() {
 			boxShader.setUniform("model", &model);
 			container.draw(36);
 		}
-
-
-		model = glm::mat4();
-		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.1f));
-
-		lightShader.setUniform("view", &view);
-		lightShader.setUniform("projection", &projection);
-		lightShader.setUniform("model", &model);
-
-
-
-		
-		light.draw(36);
 		
 		window.update();
 

@@ -109,6 +109,11 @@ public:
 		glUniform1f(uniformLocation, value);
 	}
 
+	void setUniform(const char* name, int value) {
+		this->use();
+		GLint uniformLocation = glGetUniformLocation(this->program, name);
+		glUniform1i(uniformLocation, value);
+	}
 
 	void setUniform(const char* name, glm::mat4* value) {
 		this->use();

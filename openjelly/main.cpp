@@ -76,12 +76,23 @@ int main() {
 	std::string filename = "images/container2.png";
 	int tW, tH, tC;
 	unsigned char* texImage = stbi_load(filename.c_str(), &tW, &tH, &tC, STBI_rgb);
-
 	GLuint diffuseMap;
 	glGenTextures(1, &diffuseMap);
 	glBindTexture(GL_TEXTURE_2D, diffuseMap);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tW, tH, 0, GL_RGB, GL_UNSIGNED_BYTE, texImage);
 	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	stbi_image_free(texImage);
+
+	filename = "images/container2_specular.png";
+	texImage = stbi_load(filename.c_str(), &tW, &tH, &tC, STBI_rgb);
+	GLuint specularMap;
+	glGenTextures(1, &specularMap);
+	glBindTexture(GL_TEXTURE_2D, specularMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tW, tH, 0, GL_RGB, GL_UNSIGNED_BYTE, texImage);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	stbi_image_free(texImage);
 
 	GLuint VBO;
@@ -118,9 +129,15 @@ int main() {
 		boxShader.setUniform("light.diffuse",  1.0f, 1.0f, 1.0f);
 		boxShader.setUniform("light.specular", 1.0f, 1.0f, 1.0f);
 
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, diffuseMap);
+		boxShader.setUniform("material.diffuse", 0);
+
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, specularMap);
+		boxShader.setUniform("material.specular", 1);
+
 		boxShader.setUniform("material.ambient", 0.05375f, 0.05f, 0.06625f);
-		boxShader.setUniform("material.diffuse", 0.0f);
-		boxShader.setUniform("material.specular", 0.332741f, 0.328634f, 0.346435f);
 		boxShader.setUniform("material.shininess", 38.0f);
 
 		glm::mat4 model, view, projection;
@@ -139,8 +156,7 @@ int main() {
 		lightShader.setUniform("view", &view);
 		lightShader.setUniform("projection", &projection);
 		
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, diffuseMap);
+
 
 		container.draw(36);
 		light.draw(36);

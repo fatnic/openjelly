@@ -38,4 +38,5 @@ public:
 	bool isMouseButtonPressed(unsigned int button) const;
 	bool hasMouseMoved() const;
 	float delta = 0.0f;
+	float aspectRatio;
 };

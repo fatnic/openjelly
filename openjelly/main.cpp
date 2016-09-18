@@ -118,11 +118,11 @@ int main() {
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
-	glm::mat4 model, view, projection;
-	boxShader.setUniform("model", &model);
-
 
 	while (!window.closed()) {
+
+		glm::mat4 model, view, projection;
+		boxShader.setUniform("model", &model);	
 
 		window.clear(0.1f, 0.1, 0.1f);
 
@@ -131,13 +131,20 @@ int main() {
 
 		processMovement(&camera, &window);
 
-		projection = glm::perspective(camera.fov, window.getWidth() / window.getHeight(), 0.01f, 100.0f);
+		projection = glm::perspective(camera.fov, window.aspectRatio, 0.01f, 100.0f);
 		boxShader.setUniform("projection", &projection);
 
 		boxShader.setUniform("view", &camera.getView());
 
 		glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		for (int i = 0; i < 10; i++)
+		{
+			model = glm::mat4();
+			model = glm::translate(model, glm::vec3((float)i, 0.0f, 0.0f));
+			boxShader.setUniform("model", &model);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
 		window.update();
 

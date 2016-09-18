@@ -40,6 +40,7 @@ bool Window::init()
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	_window = glfwCreateWindow(_width, _height, _title, nullptr, nullptr);
+	aspectRatio = (float)_width / (float)_height;
 
 	if (!_window) {
 		glfwTerminate();
@@ -76,7 +77,7 @@ bool Window::init()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
-	//glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glViewport(0, 0, _width, _height);
 
@@ -132,6 +133,7 @@ void windowResize(GLFWwindow* window, int width, int height)
 	Window* win = (Window*)glfwGetWindowUserPointer(window);
 	win->_width = width;
 	win->_height = height;
+	win->aspectRatio = (float)width / (float)height;
 	glViewport(0, 0, width, height);
 }
 

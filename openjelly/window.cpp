@@ -35,7 +35,7 @@ bool Window::init()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	//glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
@@ -57,7 +57,7 @@ bool Window::init()
 	glfwSetCursorPosCallback(_window, cursorPositionCallback);
 	glfwSetWindowSizeCallback(_window, windowResize);
 
-	glfwSetCursorPos(_window, 400, 300);
+	glfwSetCursorPos(_window, _width/2, _height/2);
 
 	if (glewInit() != GLEW_OK) {
 		std::cout << "Failed to initialize GLEW" << std::endl;
@@ -76,7 +76,9 @@ bool Window::init()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
-	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	glViewport(0, 0, _width, _height);
 
 	return true;
 }
@@ -99,14 +101,14 @@ void Window::update()
 	glfwSwapBuffers(_window);
 }
 
-int Window::getWidth() const
+float Window::getWidth() const
 {
-	return _width;
+	return (float)_width;
 }
 
-int Window::getHeight() const
+float Window::getHeight() const
 {
-	return _height;
+	return (float)_height;
 }
 
 bool Window::isKeyPressed(unsigned int keycode) const
@@ -127,6 +129,9 @@ bool Window::isMouseButtonPressed(unsigned int button) const
 
 void windowResize(GLFWwindow* window, int width, int height)
 {
+	Window* win = (Window*)glfwGetWindowUserPointer(window);
+	win->_width = width;
+	win->_height = height;
 	glViewport(0, 0, width, height);
 }
 

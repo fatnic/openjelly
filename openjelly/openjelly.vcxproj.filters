@@ -59,5 +59,7 @@
     <None Include="packages.config" />
     <None Include="shaders\text.frag" />
     <None Include="shaders\text.vert" />
+    <None Include="shaders\box.frag" />
+    <None Include="shaders\box.vert" />
   </ItemGroup>
 </Project>

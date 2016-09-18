@@ -31,8 +31,8 @@ public:
 	void close();
 	void clear(GLfloat r = 0.0f, GLfloat g = 0.0f, GLfloat b = 0.0f, GLfloat a = 1.0f);
 	void update();
-	int getWidth() const;
-	int getHeight() const;
+	float getWidth() const;
+	float getHeight() const;
 	glm::vec2 getMousePosition() const;
 	bool isKeyPressed(unsigned int keycode) const;
 	bool isMouseButtonPressed(unsigned int button) const;

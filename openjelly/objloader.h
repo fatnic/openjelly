@@ -9,6 +9,8 @@
 
 #include <glm\glm.hpp>
 
+#include "texture.h"
+
 class ObjLoader {
 public:
 

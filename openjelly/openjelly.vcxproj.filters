@@ -56,5 +56,8 @@
     <None Include="shaders\light.frag" />
     <None Include="shaders\light.vert" />
     <None Include="shaders\basic.vert" />
+    <None Include="packages.config" />
+    <None Include="shaders\text.frag" />
+    <None Include="shaders\text.vert" />
   </ItemGroup>
 </Project>
